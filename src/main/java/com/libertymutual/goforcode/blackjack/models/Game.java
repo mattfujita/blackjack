@@ -5,7 +5,7 @@ public class Game {
 	private Deck deck = new Deck();
 	private Hand playerHand;
 	private Hand dealerHand;
-	
+
 	public Game() {
 
 		playerHand = new Hand();
@@ -47,7 +47,6 @@ public class Game {
 	}
 	
 	public void stand() {
-		System.out.println(dealerHand.getHandValue());
 		while(dealerHand.getHandValue() < 17) {
 			dealerHand.addCardToHand(deck.draw());
 		}
