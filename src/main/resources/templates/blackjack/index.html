@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Simple Blackjack</title>
+</head>
+<body>
+	<h1>Welcome To Simple Blackjack Game</h1>
+
+	{{ #userExists }}
+		<div>Hi, {{ name }}</div>
+		<div>Wallet: {{ wallet }}</div>
+		<table>
+			<th>Dealer's Hand:</th><th>Player's Hand:</th>
+			<tr>
+				<td>
+				{{#showOneDealerCard}}
+					<div>{{dealerHand.0}}</div>
+				{{/showOneDealerCard}}
+				{{#userStands}}
+					{{ #dealerHand }}
+						<div>{{.}}</div> 
+					{{ /dealerHand }}
+				{{/userStands}}	
+				</td>
+	
+				<td>
+				{{ #playerHand }}
+				<div>{{.}}</div> 
+				{{ /playerHand }}
+				</td>
+			</tr>
+		</table>
+		<form method="post" action="/blackjack/hit">
+			<button>Hit</button>
+		</form>
+		<form method="post" action="/blackjack/stand">
+			<button>Stand</button>
+		</form>
+	{{ /userExists }} 
+	
+	{{ #newUser }}
+		<div>What is your name?</div>
+		<form method="post" action="/blackjack/user">
+			<input type="text" name="name" placeholder="Enter Your Name" required>
+			<br>
+			<div>How much will money will you be placing?</div>
+			<input type="number" name="wallet" placeholder="Enter Your Wallet"
+				required> <br>
+			<button>Submit</button>
+		</form>
+	{{ /newUser}}
+</body>
+</html>
