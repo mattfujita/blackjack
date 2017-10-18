@@ -71,7 +71,7 @@ public class Game {
 		}
 	}
 
-	public boolean getWin() {
+	public boolean determineIfUserWins() {
 		return win;
 	}
 
@@ -79,8 +79,12 @@ public class Game {
 		this.win = win;
 	}
 
-	public boolean getLoss() {
+	public boolean determineIfUserLost() {
 		return loss;
+	}
+	
+	public boolean determineATie() {
+		return push;
 	}
 
 	public void setLoss(boolean loss) {

@@ -16,6 +16,7 @@ public class BlackjackController {
 	private Player user = new Player();
 	private boolean userExists = false;
 	private boolean userStands = false;
+	private int wallet;
 	private Game game;
 	
 	public BlackjackController() {
@@ -32,15 +33,17 @@ public class BlackjackController {
 		model.addAttribute("dealerHand", game.getDealerHand().stringVersionOfHand());
 		model.addAttribute("showOneDealerCard", !userStands);
 		model.addAttribute("userStands", userStands);
-		model.addAttribute("didNotLose", game.getLoss() == false);
-		model.addAttribute("userLossed", game.getLoss() == true);
-		model.addAttribute("userWon", game.getWin() == true);
+		model.addAttribute("hideHitAndStand", userStands == false);
+		model.addAttribute("userLost", game.determineIfUserLost() == true);
+		model.addAttribute("userWon", game.determineIfUserWins() == true);
+		model.addAttribute("push", game.determineATie() == true);
 		return "/blackjack/index";
 	}
 	
 	@PostMapping("/user")
 	public String createUser(String name, int wallet) {
 		user = new Player(name, wallet);
+		this.wallet = user.getWallet();
 		userExists = true;
 
 		return "redirect:/blackjack";
@@ -56,6 +59,13 @@ public class BlackjackController {
 	public String stand() {
 		game.stand();
 		userStands = true;
+		
+		return "redirect:/blackjack";
+	}
+	
+	@PostMapping("/bet")
+	public String bet(int bet) {
+		wallet = user.getWallet() - bet;
 		
 		return "redirect:/blackjack";
 	}
