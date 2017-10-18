@@ -31,13 +31,31 @@
 				</td>
 			</tr>
 		</table>
-		<form method="post" action="/blackjack/hit">
-			<button>Hit</button>
-		</form>
-		<form method="post" action="/blackjack/stand">
-			<button>Stand</button>
-		</form>
+		{{ #didNotLose }} 
+			<form method="post" action="/blackjack/hit">
+				<button>Hit</button>
+			</form>
+			<form method="post" action="/blackjack/stand">
+				<button>Stand</button>
+			</form>
+		{{ /didNotLose }} 
 	{{ /userExists }} 
+	
+	{{ #userLossed }}
+		<p>You lost! Play again?</p>
+		<form>
+			<input type="number" name="wallet" placeholder="Place Your Bet" required>
+			<button>Bet</button>
+		</form>
+	{{ /userLossed }}
+	
+	{{ #userWon }}
+		<p>You won! Play again?</p>
+		<form>
+			<input type="number" name="wallet" placeholder="Place Your Bet" required>
+			<button>Bet</button>
+		</form>
+	{{ /userWon }}
 	
 	{{ #newUser }}
 		<div>What is your name?</div>
@@ -50,5 +68,6 @@
 			<button>Submit</button>
 		</form>
 	{{ /newUser}}
+	
 </body>
 </html>

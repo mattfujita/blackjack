@@ -32,7 +32,9 @@ public class BlackjackController {
 		model.addAttribute("dealerHand", game.getDealerHand().stringVersionOfHand());
 		model.addAttribute("showOneDealerCard", !userStands);
 		model.addAttribute("userStands", userStands);
-		model.addAttribute("playerDidNotLose", game.getPlayerHand().getHandValue() < 21);
+		model.addAttribute("didNotLose", game.getLoss() == false);
+		model.addAttribute("userLossed", game.getLoss() == true);
+		model.addAttribute("userWon", game.getWin() == true);
 		return "/blackjack/index";
 	}
 	
