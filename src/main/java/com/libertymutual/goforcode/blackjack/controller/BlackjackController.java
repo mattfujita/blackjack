@@ -7,16 +7,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.libertymutual.goforcode.blackjack.models.Game;
-import com.libertymutual.goforcode.blackjack.models.Player;
 
 @Controller
 @RequestMapping("/blackjack")
 public class BlackjackController {
 
-	private Player user = new Player();
 	private boolean userExists = false;
-	private boolean userStands = false;
-	private int wallet;
+	private boolean userEndsTurn = false;
 	private Game game;
 	
 	public BlackjackController() {
@@ -27,13 +24,13 @@ public class BlackjackController {
 	public String renderLoginPage(Model model) {
 		model.addAttribute("userExists", userExists);
 		model.addAttribute("newUser", !userExists);
-		model.addAttribute("name", user.getName());
-		model.addAttribute("wallet", user.getWallet());
+		model.addAttribute("name", game.getAPlayer().getName());
+		model.addAttribute("wallet", game.getPlayerWallet());
 		model.addAttribute("playerHand", game.getPlayerHand().stringVersionOfHand());
 		model.addAttribute("dealerHand", game.getDealerHand().stringVersionOfHand());
-		model.addAttribute("showOneDealerCard", !userStands);
-		model.addAttribute("userStands", userStands);
-		model.addAttribute("hideHitAndStand", userStands == false);
+		model.addAttribute("showOneDealerCard", !userEndsTurn);
+		model.addAttribute("userStands", userEndsTurn);
+		model.addAttribute("hideHitAndStand", userEndsTurn == false);
 		model.addAttribute("userLost", game.determineIfUserLost() == true);
 		model.addAttribute("userWon", game.determineIfUserWins() == true);
 		model.addAttribute("push", game.determineATie() == true);
@@ -41,9 +38,9 @@ public class BlackjackController {
 	}
 	
 	@PostMapping("/user")
-	public String createUser(String name, int wallet) {
-		user = new Player(name, wallet);
-		this.wallet = user.getWallet();
+	public String createUser(String name, int wallet, int bet) {
+		game.createANewUser(name, wallet);
+		game.setWalletBasedOnBets(bet);
 		userExists = true;
 
 		return "redirect:/blackjack";
@@ -58,14 +55,16 @@ public class BlackjackController {
 	@PostMapping("/stand")
 	public String stand() {
 		game.stand();
-		userStands = true;
+		userEndsTurn = true;
 		
 		return "redirect:/blackjack";
 	}
 	
 	@PostMapping("/bet")
 	public String bet(int bet) {
-		wallet = user.getWallet() - bet;
+		
+		game = game.startANewRound(bet);
+		userEndsTurn = false;
 		
 		return "redirect:/blackjack";
 	}

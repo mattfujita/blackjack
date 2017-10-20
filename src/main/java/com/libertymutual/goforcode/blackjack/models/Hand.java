@@ -9,7 +9,6 @@ public class Hand {
 	
 	public Hand() {
 		hand = new ArrayList<Card>();
-		handValue = 0;
 	}
 	
 	public void addCardToHand(Card card) {
@@ -21,6 +20,8 @@ public class Hand {
 	}
 	
 	public int getHandValue() {
+		handValue = 0;
+		
 		for (Card c : hand) {
 			handValue += c.getValue();
 		}
