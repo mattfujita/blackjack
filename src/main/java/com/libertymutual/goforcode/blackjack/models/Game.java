@@ -7,9 +7,11 @@ public class Game {
 	private Hand playerHand;
 	private Hand dealerHand;
 	private int playerWallet;
+	private int bet;
 	private boolean win;
 	private boolean loss;
 	private boolean push;
+	private boolean endOfGame;
 
 	public Game() {
 
@@ -18,6 +20,7 @@ public class Game {
 		loss = false;
 		win = false;
 		push = false;
+		endOfGame = false;
 
 		playerHand.addCardToHand(deck.draw());
 		dealerHand.addCardToHand(deck.draw());
@@ -38,6 +41,14 @@ public class Game {
 		dealerHand.addCardToHand(deck.draw());
 		playerHand.addCardToHand(deck.draw());
 		dealerHand.addCardToHand(deck.draw());
+	}
+	
+	public void createANewUser(String name, int wallet, int bet) {
+		player = new Player(name, wallet);
+		this.playerWallet = wallet;
+		this.bet = bet;
+		this.playerWallet -= this.bet;
+		
 	}
 
 	public Deck getDeck() {
@@ -86,6 +97,16 @@ public class Game {
 		} else {
 			loss = true;
 		}
+		
+		setWalletBasedOnBets(bet);
+		
+		if(playerWallet <= 0) {
+			endOfGame = true;
+		}
+	}
+	
+	public boolean determineIfANewGameNeedsToBeCreated() {
+		return endOfGame;
 	}
 
 	public boolean determineIfUserWins() {
@@ -107,16 +128,6 @@ public class Game {
 	public void setLoss(boolean loss) {
 		this.loss = loss;
 	}
-
-	public void createANewUser(String name, int wallet) {
-		player = new Player(name, wallet);
-		this.playerWallet = wallet;
-		
-	}
-	
-	public void setWalletBasedOnBets(int bet) {
-		playerWallet -= bet;
-	}
 	
 	public int getPlayerWallet() {
 		return playerWallet;
@@ -129,13 +140,24 @@ public class Game {
 	private void setPlayerToNewRound(Player player) {
 		this.player = player;
 	}
-
+	
+	public void setWalletBasedOnBets(int bet) {
+		//still need to add payout for a blackjack
+		
+		if(win) {
+			playerWallet += bet * 2;
+		}  else if (push) {
+			playerWallet += bet;
+		} 
+	}
+	
 	public Game startANewRound(int bet) {
 		
 		Game game = new Game(getPlayerWallet());
 		
 		game.setPlayerToNewRound(player);
 		game.setWalletBasedOnBets(bet);
+
 		return game;
 	}
 

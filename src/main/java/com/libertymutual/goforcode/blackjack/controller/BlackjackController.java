@@ -39,8 +39,7 @@ public class BlackjackController {
 	
 	@PostMapping("/user")
 	public String createUser(String name, int wallet, int bet) {
-		game.createANewUser(name, wallet);
-		game.setWalletBasedOnBets(bet);
+		game.createANewUser(name, wallet, bet);
 		userExists = true;
 
 		return "redirect:/blackjack";
@@ -56,6 +55,9 @@ public class BlackjackController {
 	public String stand() {
 		game.stand();
 		userEndsTurn = true;
+		if(game.determineIfANewGameNeedsToBeCreated() == true) {
+			userExists = false;
+		}
 		
 		return "redirect:/blackjack";
 	}
