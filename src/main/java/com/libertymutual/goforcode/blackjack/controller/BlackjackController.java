@@ -74,6 +74,19 @@ public class BlackjackController {
 		return "redirect:/blackjack";
 	}
 	
+	@PostMapping("/doubleDown")
+	public String doubleDown() {
+		game.doubleDown();
+		userEndsTurn = true;
+		if(game.determineIfANewGameNeedsToBeCreated() == true) {
+			userExists = false;
+			ranOutOfMoney = true;
+			game = new Game();
+		}
+		
+		return "redirect:/blackjack";
+	}
+	
 	@PostMapping("/bet")
 	public String bet(int bet) {
 		

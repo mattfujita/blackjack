@@ -122,6 +122,18 @@ public class Game {
 		}
 	}
 	
+	public void doubleDown() {
+		if(this.bet <= this.playerWallet) {
+			this.playerWallet -= this.bet;
+			this.bet *= 2;
+			playerHand.addCardToHand(deck.draw());
+		}
+		
+		stand();
+		
+	}
+
+	
 	public boolean determineIfANewGameNeedsToBeCreated() {
 		return endOfGame;
 	}
