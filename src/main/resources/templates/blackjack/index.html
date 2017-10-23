@@ -40,9 +40,11 @@
 			<form method="post" action="/blackjack/stand">
 				<button>Stand</button>
 			</form>
+			{{ #hideDoubleDown }}
 			<form method="post" action="/blackjack/doubleDown">
 				<button>Double Down</button>
 			</form>
+			{{ /hideDoubleDown }}
 		{{ /hideDependingOnPlayerHand }}
 		{{ /hideHitAndStand }} 
 		

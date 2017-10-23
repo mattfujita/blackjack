@@ -130,6 +130,9 @@ public class Game {
 		}
 		
 		stand();
+	}
+	
+	public void split() {
 		
 	}
 
@@ -170,12 +173,16 @@ public class Game {
 		this.player = player;
 	}
 	
+	public int getBet() {
+		return this.bet;
+	}
+	
 	public void blackjackCheck() {
 		if(playerHand.getHandValue() == 21) {
 			blackjack = true;
 			if(dealerHand.getHandValue() != 21) {
-				setWalletBasedOnBets();
 				win = true;
+				setWalletBasedOnBets();
 			} else {
 				push = true;
 				setWalletBasedOnBets();

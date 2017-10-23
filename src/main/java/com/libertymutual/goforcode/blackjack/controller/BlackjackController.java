@@ -34,6 +34,7 @@ public class BlackjackController {
 		model.addAttribute("showOneDealerCard", !userEndsTurn);
 		model.addAttribute("userStands", userEndsTurn);
 		model.addAttribute("hideHitAndStand", userEndsTurn == false);
+		model.addAttribute("hideDoubleDown", game.getPlayerWallet() >= game.getBet());
 		model.addAttribute("hideDependingOnPlayerHand", game.getPlayerHand().getHandValue() <= 21);
 		model.addAttribute("userLost", game.determineIfUserLost() == true);
 		model.addAttribute("userWon", game.determineIfUserWins() == true);
@@ -68,6 +69,7 @@ public class BlackjackController {
 		if(game.determineIfANewGameNeedsToBeCreated() == true) {
 			userExists = false;
 			ranOutOfMoney = true;
+			userEndsTurn = false;
 			game = new Game();
 		}
 		
@@ -81,6 +83,7 @@ public class BlackjackController {
 		if(game.determineIfANewGameNeedsToBeCreated() == true) {
 			userExists = false;
 			ranOutOfMoney = true;
+			userEndsTurn = false;
 			game = new Game();
 		}
 		
