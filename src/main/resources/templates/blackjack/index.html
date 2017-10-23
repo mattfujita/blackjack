@@ -39,9 +39,8 @@
 				<button>Stand</button>
 			</form>
 		{{ /hideHitAndStand }} 
-	{{ /userExists }} 
-	
-	{{ #userLost }}
+		
+			{{ #userLost }}
 		<p>You lost! Play again?</p>
 		<form method="post" action="/blackjack/bet">
 			<input type="number" name="bet" placeholder="Place Your Bet" required>
@@ -64,8 +63,12 @@
 			<button>Bet</button>
 		</form>
 	{{ /userWon }}
+	{{ /userExists }} 
 	
 	{{ #newUser }}
+		{{ #ranOutOfMoney }}
+			<h3>You ran out of money. Start a new game!</h3>
+		{{ /ranOutOfMoney }}
 		<div>What is your name?</div>
 		<form method="post" action="/blackjack/user">
 			<input type="text" name="name" placeholder="Enter Your Name" required>

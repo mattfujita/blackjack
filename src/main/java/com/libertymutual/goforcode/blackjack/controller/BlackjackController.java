@@ -14,6 +14,7 @@ public class BlackjackController {
 
 	private boolean userExists = false;
 	private boolean userEndsTurn = false;
+	private boolean ranOutOfMoney = false;
 	private Game game;
 	
 	public BlackjackController() {
@@ -24,6 +25,7 @@ public class BlackjackController {
 	public String renderLoginPage(Model model) {
 		model.addAttribute("userExists", userExists);
 		model.addAttribute("newUser", !userExists);
+		model.addAttribute("ranOutOfMoney", ranOutOfMoney);
 		model.addAttribute("name", game.getAPlayer().getName());
 		model.addAttribute("wallet", game.getPlayerWallet());
 		model.addAttribute("playerHand", game.getPlayerHand().stringVersionOfHand());
@@ -41,6 +43,7 @@ public class BlackjackController {
 	public String createUser(String name, int wallet, int bet) {
 		game.createANewUser(name, wallet, bet);
 		userExists = true;
+		ranOutOfMoney = false;
 
 		return "redirect:/blackjack";
 	}
@@ -48,6 +51,11 @@ public class BlackjackController {
 	@PostMapping("/hit")
 	public String hit() {
 		game.hit();
+		if(game.determineIfANewGameNeedsToBeCreated() == true) {
+			userExists = false;
+			ranOutOfMoney = true;
+			game = new Game();
+		}
 		return "redirect:/blackjack";
 	}
 	
@@ -57,6 +65,8 @@ public class BlackjackController {
 		userEndsTurn = true;
 		if(game.determineIfANewGameNeedsToBeCreated() == true) {
 			userExists = false;
+			ranOutOfMoney = true;
+			game = new Game();
 		}
 		
 		return "redirect:/blackjack";

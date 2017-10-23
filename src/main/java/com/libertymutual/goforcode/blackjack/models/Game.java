@@ -11,21 +11,27 @@ public class Game {
 	private boolean win;
 	private boolean loss;
 	private boolean push;
+	private boolean blackjack;
 	private boolean endOfGame;
 
 	public Game() {
 
 		playerHand = new Hand();
 		dealerHand = new Hand();
+		playerWallet = 0;
+		bet = 0;
 		loss = false;
 		win = false;
 		push = false;
+		blackjack = false;
 		endOfGame = false;
 
 		playerHand.addCardToHand(deck.draw());
 		dealerHand.addCardToHand(deck.draw());
 		playerHand.addCardToHand(deck.draw());
 		dealerHand.addCardToHand(deck.draw());
+		
+		blackjackCheck();
 	}
 
 	public Game(int playerWallet) {
@@ -47,7 +53,12 @@ public class Game {
 		player = new Player(name, wallet);
 		this.playerWallet = wallet;
 		this.bet = bet;
-		this.playerWallet -= this.bet;
+		if(this.bet <= playerWallet) {
+			this.playerWallet -= this.bet;
+		} else {
+			bet = this.playerWallet;
+			this.playerWallet -= bet;
+		}
 		
 	}
 
@@ -81,6 +92,10 @@ public class Game {
 			loss = true;
 		}
 		
+		if(playerWallet <= 0 && loss) {
+			endOfGame = true;
+		}
+		
 	}
 	
 	public void stand() {
@@ -98,9 +113,9 @@ public class Game {
 			loss = true;
 		}
 		
-		setWalletBasedOnBets(bet);
+		setWalletBasedOnBets();
 		
-		if(playerWallet <= 0) {
+		if(playerWallet <= 0 && loss) {
 			endOfGame = true;
 		}
 	}
@@ -141,22 +156,47 @@ public class Game {
 		this.player = player;
 	}
 	
-	public void setWalletBasedOnBets(int bet) {
-		//still need to add payout for a blackjack
+	public void blackjackCheck() {
+		if(playerHand.getHandValue() == 21) {
+			blackjack = true;
+			if(dealerHand.getHandValue() != 21) {
+				setWalletBasedOnBets();
+			} else {
+				push = true;
+				setWalletBasedOnBets();
+			}
+		}
+	}
+	
+	public void setWalletBasedOnBets() {
+		
+		if(blackjack) {
+			this.playerWallet += bet * 1.5;
+		}
 		
 		if(win) {
-			playerWallet += bet * 2;
+			this.playerWallet += bet * 2;
 		}  else if (push) {
-			playerWallet += bet;
+			this.playerWallet += bet;
 		} 
+	}
+	
+	public void setWalletForNewRound(int bet) {
+		this.bet = bet;
+		
+		if(this.bet <= playerWallet) {
+			this.playerWallet -= this.bet;
+		} else {
+			bet = this.playerWallet;
+			this.playerWallet -= bet;
+		}
 	}
 	
 	public Game startANewRound(int bet) {
 		
 		Game game = new Game(getPlayerWallet());
-		
 		game.setPlayerToNewRound(player);
-		game.setWalletBasedOnBets(bet);
+		game.setWalletForNewRound(bet);
 
 		return game;
 	}
