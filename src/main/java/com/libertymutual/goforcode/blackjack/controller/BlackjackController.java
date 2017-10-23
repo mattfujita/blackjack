@@ -34,6 +34,7 @@ public class BlackjackController {
 		model.addAttribute("showOneDealerCard", !userEndsTurn);
 		model.addAttribute("userStands", userEndsTurn);
 		model.addAttribute("hideHitAndStand", userEndsTurn == false);
+		model.addAttribute("hideDependingOnPlayerHand", game.getPlayerHand().getHandValue() <= 21);
 		model.addAttribute("userLost", game.determineIfUserLost() == true);
 		model.addAttribute("userWon", game.determineIfUserWins() == true);
 		model.addAttribute("push", game.determineATie() == true);

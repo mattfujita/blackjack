@@ -47,6 +47,8 @@ public class Game {
 		dealerHand.addCardToHand(deck.draw());
 		playerHand.addCardToHand(deck.draw());
 		dealerHand.addCardToHand(deck.draw());
+		
+		blackjackCheck();
 	}
 	
 	public void createANewUser(String name, int wallet, int bet) {
@@ -161,6 +163,7 @@ public class Game {
 			blackjack = true;
 			if(dealerHand.getHandValue() != 21) {
 				setWalletBasedOnBets();
+				win = true;
 			} else {
 				push = true;
 				setWalletBasedOnBets();
@@ -170,11 +173,10 @@ public class Game {
 	
 	public void setWalletBasedOnBets() {
 		
-		if(blackjack) {
+		if(win && blackjack) {
 			this.playerWallet += bet * 1.5;
-		}
-		
-		if(win) {
+			win = false;
+		} else if(win) {
 			this.playerWallet += bet * 2;
 		}  else if (push) {
 			this.playerWallet += bet;

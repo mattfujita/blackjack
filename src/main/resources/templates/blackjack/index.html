@@ -33,12 +33,14 @@
 			</tr>
 		</table>
 		{{ #hideHitAndStand }} 
+		{{ #hideDependingOnPlayerHand }}
 			<form method="post" action="/blackjack/hit">
 				<button>Hit</button>
 			</form>
 			<form method="post" action="/blackjack/stand">
 				<button>Stand</button>
 			</form>
+		{{ /hideDependingOnPlayerHand }}
 		{{ /hideHitAndStand }} 
 		
 	{{ #userLost }}
