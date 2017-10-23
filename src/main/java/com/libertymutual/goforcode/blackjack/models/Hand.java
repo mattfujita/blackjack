@@ -6,6 +6,7 @@ public class Hand {
 	
 	private ArrayList<Card> hand;
 	private int handValue;
+	private int aceCountInHand;
 	
 	public Hand() {
 		hand = new ArrayList<Card>();
@@ -21,9 +22,22 @@ public class Hand {
 	
 	public int getHandValue() {
 		handValue = 0;
+		aceCountInHand = 0;
 		
 		for (Card c : hand) {
 			handValue += c.getValue();
+			
+			if(c.getValue() == 11) {
+				aceCountInHand += 1;
+			}
+		}
+		
+		if(handValue > 21) {
+			for(int i = 0; i < aceCountInHand; i+=1) {
+				if(handValue > 21) {
+					handValue -= 10;
+				}
+			}
 		}
 		
 		return handValue;

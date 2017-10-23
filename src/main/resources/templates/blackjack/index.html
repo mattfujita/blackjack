@@ -10,6 +10,7 @@
 	{{ #userExists }}
 		<div>Hi, {{ name }}</div>
 		<div>Wallet: {{ wallet }}</div>
+		<div>Hand Value: {{ handValue }}</div>
 		<table>
 			<th>Dealer's Hand:</th><th>Player's Hand:</th>
 			<tr>
@@ -40,7 +41,7 @@
 			</form>
 		{{ /hideHitAndStand }} 
 		
-			{{ #userLost }}
+	{{ #userLost }}
 		<p>You lost! Play again?</p>
 		<form method="post" action="/blackjack/bet">
 			<input type="number" name="bet" placeholder="Place Your Bet" required>

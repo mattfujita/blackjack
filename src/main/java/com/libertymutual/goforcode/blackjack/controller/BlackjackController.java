@@ -28,6 +28,7 @@ public class BlackjackController {
 		model.addAttribute("ranOutOfMoney", ranOutOfMoney);
 		model.addAttribute("name", game.getAPlayer().getName());
 		model.addAttribute("wallet", game.getPlayerWallet());
+		model.addAttribute("handValue", game.getPlayerHand().getHandValue());
 		model.addAttribute("playerHand", game.getPlayerHand().stringVersionOfHand());
 		model.addAttribute("dealerHand", game.getDealerHand().stringVersionOfHand());
 		model.addAttribute("showOneDealerCard", !userEndsTurn);
