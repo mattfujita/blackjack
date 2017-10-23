@@ -94,7 +94,7 @@ public class Game {
 		
 		if(playerWallet <= 0 && loss) {
 			endOfGame = true;
-		}
+		} 
 		
 	}
 	
