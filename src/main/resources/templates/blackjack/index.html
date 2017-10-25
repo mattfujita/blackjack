@@ -8,7 +8,7 @@
 	<h1>Welcome To Simple Blackjack Game</h1>
 
 	{{ #userExists }}
-		<div>Hi, {{ name }}</div>
+		<div>Hi, {{ name }}! {{ quote }}</div>
 		<div>Wallet: {{ wallet }}</div>
 		<div>Hand Value: {{ handValue }}</div>
 		<table>
@@ -45,6 +45,11 @@
 				<button>Double Down</button>
 			</form>
 			{{ /hideDoubleDown }}
+			{{ #hideSplit }}
+			<form method="post" action="/blackjack/split">
+				<button>Split</button>
+			</form>
+			{{ /hideSplit }}
 		{{ /hideDependingOnPlayerHand }}
 		{{ /hideHitAndStand }} 
 		

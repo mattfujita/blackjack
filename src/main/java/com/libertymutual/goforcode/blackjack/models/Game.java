@@ -6,6 +6,8 @@ public class Game {
 	private Deck deck = new Deck();
 	private Hand playerHand;
 	private Hand dealerHand;
+	private Hand hand1;
+	private Hand hand2;
 	private int playerWallet;
 	private int bet;
 	private boolean win;
@@ -75,6 +77,14 @@ public class Game {
 	public Hand getPlayerHand() {
 		return playerHand;
 	}
+	
+	public Hand getHandOne() {
+		return hand1;
+	}
+	
+	public Hand getHandTwo() {
+		return hand2;
+	}
 
 	public void setPlayerHand(Hand player) {
 		this.playerHand = player;
@@ -133,7 +143,19 @@ public class Game {
 	}
 	
 	public void split() {
+		hand1 = new Hand();
+		hand2 = new Hand();
+		hand1.addCardToHand(playerHand.getOneCardFromHand(1));
+		hand2.addCardToHand(playerHand.getOneCardFromHand(0));
 		
+		if(this.bet <= this.playerWallet) {
+			this.playerWallet -= this.bet;
+			this.bet *= 2;
+			hand1.addCardToHand(deck.draw());
+			hand2.addCardToHand(deck.draw());
+		}
+		
+		stand();
 	}
 
 	

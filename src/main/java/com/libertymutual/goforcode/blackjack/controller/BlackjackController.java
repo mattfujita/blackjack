@@ -5,8 +5,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.client.RestTemplate;
 
 import com.libertymutual.goforcode.blackjack.models.Game;
+import com.libertymutual.goforcode.blackjack.models.Quote;
 
 @Controller
 @RequestMapping("/blackjack")
@@ -17,12 +19,17 @@ public class BlackjackController {
 	private boolean ranOutOfMoney = false;
 	private Game game;
 	
+	RestTemplate restTemplate = new RestTemplate();
+	private Quote quote;
+	
 	public BlackjackController() {
 		game = new Game();
+		quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 	}
 	
 	@GetMapping("")
 	public String renderLoginPage(Model model) {
+		model.addAttribute("quote", quote.getValue().getQuote().toString());
 		model.addAttribute("userExists", userExists);
 		model.addAttribute("newUser", !userExists);
 		model.addAttribute("ranOutOfMoney", ranOutOfMoney);
@@ -35,6 +42,7 @@ public class BlackjackController {
 		model.addAttribute("userStands", userEndsTurn);
 		model.addAttribute("hideHitAndStand", userEndsTurn == false);
 		model.addAttribute("hideDoubleDown", game.getPlayerWallet() >= game.getBet());
+		model.addAttribute("hideSplit", game.getPlayerHand().getOneCardFromHand(0).getRank().equals(game.getPlayerHand().getOneCardFromHand(1).getRank()));
 		model.addAttribute("hideDependingOnPlayerHand", game.getPlayerHand().getHandValue() <= 21);
 		model.addAttribute("userLost", game.determineIfUserLost() == true);
 		model.addAttribute("userWon", game.determineIfUserWins() == true);
@@ -58,6 +66,7 @@ public class BlackjackController {
 			userExists = false;
 			ranOutOfMoney = true;
 			game = new Game();
+			quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 		}
 		return "redirect:/blackjack";
 	}
@@ -71,6 +80,7 @@ public class BlackjackController {
 			ranOutOfMoney = true;
 			userEndsTurn = false;
 			game = new Game();
+			quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 		}
 		
 		return "redirect:/blackjack";
@@ -85,6 +95,22 @@ public class BlackjackController {
 			ranOutOfMoney = true;
 			userEndsTurn = false;
 			game = new Game();
+			quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
+		}
+		
+		return "redirect:/blackjack";
+	}
+	
+	@PostMapping("/split")
+	public String split() {
+		game.split();
+		userEndsTurn = true;
+		if(game.determineIfANewGameNeedsToBeCreated() == true) {
+			userExists = false;
+			ranOutOfMoney = true;
+			userEndsTurn = false;
+			game = new Game();
+			quote = restTemplate.getForObject("https://gturnquist-quoters.cfapps.io/api/random", Quote.class);
 		}
 		
 		return "redirect:/blackjack";

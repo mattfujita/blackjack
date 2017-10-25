@@ -43,6 +43,10 @@ public class Hand {
 		return handValue;
 	}
 	
+	public Card getOneCardFromHand(int index) {
+		return hand.get(index);
+	}
+	
 	public ArrayList<String> stringVersionOfHand() {
 		
 		ArrayList<String> hands = new ArrayList<String>();
